@@ -22,6 +22,20 @@ class HealthCheckView(APIView):
     def get(self, request, *args, **kwargs):
         return Response({"status": "ok", "message": "SCRIVA API is running."}, status=status.HTTP_200_OK)
 
+class DashboardStatsView(APIView):
+    permission_classes = [IsAdminUser]
+
+    def get(self, request, *args, **kwargs):
+        return Response({
+            "projects": Project.objects.count(),
+            "blogs": Blog.objects.count(),
+            "skills": Skill.objects.count(),
+            "experience": Experience.objects.count(),
+            "testimonials": Testimonial.objects.count(),
+            "services": Service.objects.count(),
+            "education": Education.objects.count(),
+        }, status=status.HTTP_200_OK)
+
 class BasePublishViewSet(viewsets.ModelViewSet):
     """
     Base viewset for models that have a 'state' field (draft/published).
