@@ -5,12 +5,13 @@ from rest_framework.permissions import IsAdminUser
 from django.core.exceptions import ValidationError
 from .models import (
     Profile, Project, Skill, Experience, Education, 
-    Service, SocialLink, Blog, Testimonial, MediaAsset, PublishState
+    Service, SocialLink, Blog, Testimonial, MediaAsset, PublishState,
+    ContactMessage
 )
 from .serializers import (
     ProfileSerializer, ProjectSerializer, SkillSerializer, ExperienceSerializer, 
     EducationSerializer, ServiceSerializer, SocialLinkSerializer, BlogSerializer, 
-    TestimonialSerializer, MediaAssetSerializer
+    TestimonialSerializer, MediaAssetSerializer, ContactMessageSerializer
 )
 from .permissions import IsAdminOrReadOnly
 import os
@@ -117,3 +118,35 @@ class MediaUploadView(APIView):
         
         serializer = MediaAssetSerializer(media, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+from django.core.mail import send_mail
+from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
+
+class ContactMessageView(APIView):
+    permission_classes = [] # Public endpoint
+
+    def post(self, request, *args, **kwargs):
+        serializer = ContactMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            # Save the message to DB first
+            message_obj = serializer.save()
+            
+            # Attempt to send email
+            try:
+                send_mail(
+                    subject=f"New Portfolio Contact from {message_obj.name}",
+                    message=f"Name: {message_obj.name}\nEmail: {message_obj.email}\n\nMessage:\n{message_obj.message}",
+                    from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@example.com',
+                    recipient_list=[settings.CONTACT_EMAIL] if hasattr(settings, 'CONTACT_EMAIL') else ['admin@example.com'],
+                    fail_silently=True,
+                )
+            except Exception as e:
+                logger.error(f"Failed to send email for contact message {message_obj.id}: {str(e)}")
+                # We don't return an error to the user because the message is safely in DB
+            
+            return Response({"success": "Message sent successfully"}, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

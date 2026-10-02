@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from .views import (
     HealthCheckView, DashboardStatsView, ProfileViewSet, ProjectViewSet, SkillViewSet,
     ExperienceViewSet, EducationViewSet, ServiceViewSet,
-    SocialLinkViewSet, BlogViewSet, TestimonialViewSet, MediaUploadView
+    SocialLinkViewSet, BlogViewSet, TestimonialViewSet, MediaUploadView, ContactMessageView
 )
 
 router = DefaultRouter()
@@ -21,5 +21,6 @@ urlpatterns = [
     path('health/', HealthCheckView.as_view(), name='health-check'),
     path('dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
     path('upload/image/', MediaUploadView.as_view(), name='media-upload'),
+    path('contact/', ContactMessageView.as_view(), name='contact'),
     path('', include(router.urls)),
 ]

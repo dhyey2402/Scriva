@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import (
     Profile, Project, Skill, Experience, Education, 
-    Service, SocialLink, Blog, Testimonial, MediaAsset
+    Service, SocialLink, Blog, Testimonial, MediaAsset, ContactMessage
 )
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -53,4 +53,9 @@ class MediaAssetSerializer(serializers.ModelSerializer):
     class Meta:
         model = MediaAsset
         fields = '__all__'
-        read_only_fields = ('file_name', 'file_type', 'uploaded_at')
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactMessage
+        fields = ['id', 'name', 'email', 'message', 'created_at']
+        read_only_fields = ['id', 'created_at']
