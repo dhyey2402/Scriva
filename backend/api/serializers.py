@@ -5,11 +5,42 @@ from .models import (
 )
 
 class ProfileSerializer(serializers.ModelSerializer):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    profile_image = serializers.SerializerMethodField()
+    resume_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Profile
         fields = '__all__'
 
+    def get_first_name(self, obj):
+        parts = obj.name.strip().split(' ', 1) if obj.name else []
+        return parts[0] if parts else ''
+
+    def get_last_name(self, obj):
+        parts = obj.name.strip().split(' ', 1) if obj.name else []
+        return parts[1] if len(parts) > 1 else ''
+
+    def get_profile_image(self, obj):
+        if not obj.image:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.image.url)
+        return obj.image.url
+
+    def get_resume_url(self, obj):
+        if not obj.resume:
+            return None
+        request = self.context.get('request')
+        if request:
+            return request.build_absolute_uri(obj.resume.url)
+        return obj.resume.url
+
 class ProjectSerializer(serializers.ModelSerializer):
+    is_featured = serializers.BooleanField(source='featured', read_only=True)
+
     class Meta:
         model = Project
         fields = '__all__'

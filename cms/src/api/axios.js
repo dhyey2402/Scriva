@@ -1,7 +1,10 @@
 import axios from 'axios';
 
+const rawApiUrl = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/';
+export const API_BASE_URL = rawApiUrl.endsWith('/') ? rawApiUrl : `${rawApiUrl}/`;
+
 const api = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: API_BASE_URL,
 });
 
 api.interceptors.request.use(
@@ -27,7 +30,7 @@ api.interceptors.response.use(
           throw new Error('No refresh token available');
         }
         
-        const response = await axios.post('http://localhost:8000/api/auth/refresh/', {
+        const response = await axios.post(`${API_BASE_URL}auth/refresh/`, {
           refresh: refreshToken
         });
         

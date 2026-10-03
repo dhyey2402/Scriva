@@ -22,5 +22,7 @@ urlpatterns = [
     path('dashboard/stats/', DashboardStatsView.as_view(), name='dashboard-stats'),
     path('upload/image/', MediaUploadView.as_view(), name='media-upload'),
     path('contact/', ContactMessageView.as_view(), name='contact'),
+    path('profile/', ProfileViewSet.as_view({'get': 'list', 'post': 'create'}), name='profile-alias'),
+    path('about/', ProfileViewSet.as_view({'get': 'list'}), name='about-alias'),
     path('', include(router.urls)),
 ]
