@@ -105,7 +105,7 @@ const Projects = () => {
                     <a
                       href={project.github_url}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 gap-2"
                     >
                       <GithubIcon size={16} /> Source Code
@@ -115,7 +115,7 @@ const Projects = () => {
                     <a
                       href={project.live_url}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="flex items-center text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors duration-300 gap-2 ml-auto"
                     >
                       Live Demo <ExternalLink size={16} />

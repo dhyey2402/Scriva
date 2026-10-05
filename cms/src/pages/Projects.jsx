@@ -210,12 +210,12 @@ const Projects = () => {
                 
                 <div className="flex items-center gap-4 mb-4">
                   {project.github_url && (
-                    <a href={project.github_url} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                    <a href={project.github_url} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                       <Code size={18} />
                     </a>
                   )}
                   {project.live_url && (
-                    <a href={project.live_url} target="_blank" rel="noreferrer" className="text-gray-400 hover:text-white transition-colors">
+                    <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors">
                       <ExternalLink size={18} />
                     </a>
                   )}
