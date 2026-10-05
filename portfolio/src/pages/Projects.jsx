@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
 import { Loader, ErrorMessage, EmptyState } from '../components/UI';
-import { ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github, Star } from 'lucide-react';
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -29,49 +29,79 @@ const Projects = () => {
   if (error) return <ErrorMessage message={error} />;
 
   return (
-    <div className="space-y-12 animate-in fade-in duration-700">
-      <div className="max-w-3xl">
-        <h1 className="text-4xl font-bold text-white mb-4">Selected Works</h1>
-        <p className="text-xl text-gray-400">
-          A collection of projects showcasing my experience in building scalable applications.
+    <div className="space-y-12 animate-fade-in-up">
+      <div className="max-w-3xl space-y-4">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full gold-badge text-[11px] font-mono tracking-widest uppercase">
+          Selected Works
+        </div>
+        <h1 className="heading-serif text-4xl sm:text-5xl text-white">
+          Portfolio
+        </h1>
+        <p className="text-lg text-gray-400 font-light leading-relaxed">
+          A curated collection of projects showcasing my experience in building scalable, production-grade applications.
         </p>
       </div>
 
       {projects.length === 0 ? (
         <EmptyState title="No Projects Found" message="Check back later for updates." />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projects.map((project) => (
-            <div key={project.id} className="glass-panel rounded-3xl overflow-hidden group flex flex-col h-full hover:border-indigo-500/30 transition-colors">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {projects.map((project, idx) => (
+            <div
+              key={project.id}
+              className="glass-card rounded-2xl overflow-hidden group flex flex-col h-full hover:border-amber-400/20 hover-lift animate-fade-in-up"
+              style={{ animationDelay: `${idx * 100}ms` }}
+            >
               {project.image && (
-                <div className="relative h-64 overflow-hidden">
-                  <div className="absolute inset-0 bg-gray-900/20 group-hover:bg-transparent transition-colors z-10" />
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+                <div className="relative h-56 overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#080b14] via-transparent to-transparent z-10 opacity-60" />
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
+                  {project.is_featured && (
+                    <div className="absolute top-4 right-4 z-20 flex items-center gap-1.5 px-3 py-1 rounded-full gold-badge text-[10px] font-bold">
+                      <Star size={10} fill="currentColor" />
+                      Featured
+                    </div>
+                  )}
                 </div>
               )}
-              <div className="p-8 flex flex-col flex-grow">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors">{project.title}</h3>
-                  {project.is_featured && (
-                    <span className="px-3 py-1 bg-yellow-500/10 text-yellow-500 text-xs font-bold rounded-full border border-yellow-500/20">
+              <div className="p-7 flex flex-col flex-grow">
+                <div className="flex justify-between items-start mb-3">
+                  <h3 className="text-xl font-bold text-white group-hover:text-amber-300 transition-colors duration-300 font-serif">
+                    {project.title}
+                  </h3>
+                  {!project.image && project.is_featured && (
+                    <span className="flex items-center gap-1.5 px-3 py-1 gold-badge text-[10px] font-bold rounded-full shrink-0">
+                      <Star size={10} fill="currentColor" />
                       Featured
                     </span>
                   )}
                 </div>
-                <p className="text-gray-400 mb-6 flex-grow whitespace-pre-wrap">{project.description}</p>
-                <div className="flex gap-4 mt-auto pt-6 border-t border-white/5">
+                <p className="text-gray-400 mb-6 flex-grow whitespace-pre-wrap text-sm font-light leading-relaxed">
+                  {project.description}
+                </p>
+                <div className="flex gap-4 mt-auto pt-5 border-t border-white/[0.06]">
                   {project.github_url && (
-                    <a href={project.github_url} target="_blank" rel="noreferrer" className="flex items-center text-sm font-semibold text-gray-300 hover:text-white transition-colors gap-2">
-                      <Github size={18} /> Source Code
+                    <a
+                      href={project.github_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center text-sm font-medium text-gray-300 hover:text-white transition-colors duration-300 gap-2"
+                    >
+                      <Github size={16} /> Source Code
                     </a>
                   )}
                   {project.live_url && (
-                    <a href={project.live_url} target="_blank" rel="noreferrer" className="flex items-center text-sm font-semibold text-indigo-400 hover:text-indigo-300 transition-colors gap-2 ml-auto">
-                      Live Demo <ExternalLink size={18} />
+                    <a
+                      href={project.live_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center text-sm font-medium text-amber-400 hover:text-amber-300 transition-colors duration-300 gap-2 ml-auto"
+                    >
+                      Live Demo <ExternalLink size={16} />
                     </a>
                   )}
                 </div>
