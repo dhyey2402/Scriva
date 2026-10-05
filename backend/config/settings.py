@@ -159,36 +159,71 @@ STORAGES = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+DEFAULT_CORS_ORIGINS = [
+    'https://scriva-portfolio-hazel.vercel.app',
+    'https://scriva-nine.vercel.app',
+    'https://scriva.onrender.com',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://localhost:5174',
+    'http://127.0.0.1:5174',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:4173',
+    'http://127.0.0.1:4173',
+    'http://localhost:4174',
+    'http://127.0.0.1:4174',
+]
+
+def _parse_origins(raw_val, default=None):
+    if default is None:
+        default = []
+    if raw_val is None:
+        raw_val = default
+    if isinstance(raw_val, (list, tuple)):
+        items = raw_val
+    elif isinstance(raw_val, str):
+        import re
+        cleaned = raw_val.strip(" \"'[]")
+        items = re.split(r'[,;\s]+', cleaned)
+    else:
+        items = [str(raw_val)]
+
+    result = []
+    for item in items:
+        clean_item = item.strip(" \"'").rstrip('/')
+        if clean_item and clean_item not in result:
+            result.append(clean_item)
+    return result
+
 CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=False)
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    origin.strip() for origin in env.list('CORS_ALLOWED_ORIGINS', default=[
-        'http://localhost:5173',
-        'http://127.0.0.1:5173',
-        'http://localhost:5174',
-        'http://127.0.0.1:5174',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'http://localhost:4173',
-        'http://127.0.0.1:4173',
-        'http://localhost:4174',
-        'http://127.0.0.1:4174',
-    ]) if origin.strip()
-]
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip() for origin in env.list('CSRF_TRUSTED_ORIGINS', default=[
-        'http://localhost:5173',
-        'http://127.0.0.1:5173',
-        'http://localhost:5174',
-        'http://127.0.0.1:5174',
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'http://localhost:4173',
-        'http://127.0.0.1:4173',
-        'http://localhost:4174',
-        'http://127.0.0.1:4174',
-    ]) if origin.strip()
-]
+
+# Read from environment, robustly supporting comma/whitespace-separated strings, quoted strings, or list formats
+raw_cors = env('CORS_ALLOWED_ORIGINS', default=DEFAULT_CORS_ORIGINS)
+CORS_ALLOWED_ORIGINS = _parse_origins(raw_cors, default=DEFAULT_CORS_ORIGINS)
+
+# Always guarantee that production Vercel URLs and local development origins are present
+for _orig in [
+    'https://scriva-portfolio-hazel.vercel.app',
+    'https://scriva-nine.vercel.app',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]:
+    if _orig not in CORS_ALLOWED_ORIGINS:
+        CORS_ALLOWED_ORIGINS.append(_orig)
+
+raw_csrf = env('CSRF_TRUSTED_ORIGINS', default=DEFAULT_CORS_ORIGINS)
+CSRF_TRUSTED_ORIGINS = _parse_origins(raw_csrf, default=DEFAULT_CORS_ORIGINS)
+
+for _orig in [
+    'https://scriva-portfolio-hazel.vercel.app',
+    'https://scriva-nine.vercel.app',
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+]:
+    if _orig not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_orig)
 
 import os
 from datetime import timedelta
