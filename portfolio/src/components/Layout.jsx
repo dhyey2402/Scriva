@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation, Link } from 'react-router-dom';
 import { Menu, X, ArrowUpRight, ArrowRight } from 'lucide-react';
+import { CMS_URL, LIVE_PORTFOLIO_URL } from '../constants';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -117,21 +118,21 @@ const Header = () => {
           {/* Right Action Capsules */}
           <div className="hidden sm:flex items-center gap-2.5">
             <a
-              href="http://localhost:5174/"
+              href={CMS_URL}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-300 hover:text-white bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-amber-400/20 transition-all duration-300"
             >
               <span>Open CMS</span>
               <ArrowUpRight size={13} className="text-amber-400" />
             </a>
-            <Link
-              to="/projects"
+            <a
+              href={LIVE_PORTFOLIO_URL}
               className="btn-primary inline-flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold"
             >
               <span>Live Output</span>
               <ArrowRight size={13} />
-            </Link>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -212,13 +213,20 @@ const Header = () => {
             </NavLink>
             <div className="pt-2 border-t border-white/10 flex gap-2">
               <a
-                href="http://localhost:5174/"
+                href={CMS_URL}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-medium text-gray-300 bg-white/[0.05] border border-white/10"
               >
-                <span>CMS Admin</span>
+                <span>Open CMS</span>
                 <ArrowUpRight size={13} />
+              </a>
+              <a
+                href={LIVE_PORTFOLIO_URL}
+                className="flex-1 btn-primary flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-xs font-bold"
+              >
+                <span>Live Output</span>
+                <ArrowRight size={13} />
               </a>
             </div>
           </div>
@@ -261,9 +269,9 @@ const Footer = () => {
               Contact
             </Link>
             <a
-              href="http://localhost:5174/"
+              href={CMS_URL}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-1 text-amber-400/80 hover:text-amber-300 transition-colors duration-300"
             >
               <span>CMS Portal</span>

@@ -7,6 +7,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 import api from '../api/axios';
+import { CMS_URL } from '../constants';
 
 /* ──────────────────────────────────────────────────────────────
    Scroll reveal hook — triggers .visible class when in viewport
@@ -330,9 +331,9 @@ const Home = () => {
                       <span>MUTATIONS REQUIRE JWT AUTH</span>
                     </span>
                     <a
-                      href="http://localhost:5174/"
+                      href={CMS_URL}
                       target="_blank"
-                      rel="noreferrer"
+                      rel="noopener noreferrer"
                       className="text-amber-400/80 hover:text-amber-300 transition-colors inline-flex items-center gap-1"
                     >
                       <span>ENTER CMS</span>
@@ -765,9 +766,9 @@ const Home = () => {
             <ArrowRight size={15} />
           </Link>
           <a
-            href="http://localhost:5174/"
+            href={CMS_URL}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             className="btn-secondary px-7 py-3 rounded-xl text-sm font-semibold inline-flex items-center gap-2"
           >
             <span>Open CMS Portal</span>
