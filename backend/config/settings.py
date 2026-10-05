@@ -33,7 +33,24 @@ SECRET_KEY = env('DJANGO_SECRET_KEY', default=env('SECRET_KEY', default='django-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=False)
 
-ALLOWED_HOSTS = [h.strip() for h in env.list('ALLOWED_HOSTS', default=['*'] if DEBUG else ['localhost', '127.0.0.1', 'testserver']) if h.strip()]
+ALLOWED_HOSTS = [
+    h.strip() for h in env.list('ALLOWED_HOSTS', default=[
+        '*'
+    ] if DEBUG else [
+        'localhost',
+        '127.0.0.1',
+        'testserver',
+        'scriva.onrender.com',
+        '.onrender.com',
+    ]) if h.strip()
+]
+
+# Ensure Render external hostname is automatically added to ALLOWED_HOSTS if deployed on Render
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME and RENDER_EXTERNAL_HOSTNAME not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
+if 'scriva.onrender.com' not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append('scriva.onrender.com')
 
 
 # Application definition
@@ -53,8 +70,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',

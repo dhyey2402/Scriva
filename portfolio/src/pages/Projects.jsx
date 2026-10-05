@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api/axios';
+import { Loader, ErrorMessage, EmptyState } from '../components/UI';
 import { ExternalLink, Star } from 'lucide-react';
 
 const GithubIcon = ({ size = 16, className = "" }) => (
